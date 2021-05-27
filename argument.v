@@ -5,8 +5,8 @@ const (
 )
 
 struct ArgumentParserResults {
-	mut:
-	command string
+mut:
+	command    string
 	parameters map[string]string
 }
 
@@ -23,7 +23,6 @@ fn create_argument_parser(arguments []string) ArgumentParserResults {
 	mut results := ArgumentParserResults{}
 	mut argument_index := 0
 	for argument in arguments {
-
 		if argument_index == 0 {
 			argument_index += 1
 			results.command = argument
@@ -32,7 +31,7 @@ fn create_argument_parser(arguments []string) ArgumentParserResults {
 		is_valid_command := argument.starts_with('--')
 		if !is_valid_command {
 			Exception{
-				error : '$argument is not a valid flag'
+				error: '$argument is not a valid flag'
 			}.create(true)
 		}
 		statement := argument.split('=')

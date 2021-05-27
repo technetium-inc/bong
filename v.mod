@@ -1,5 +1,5 @@
 Module {
-	name: 'bf'
+	name: 'bong'
 	description: ''
 	version: ''
 	license: ''

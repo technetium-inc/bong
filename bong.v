@@ -1,12 +1,14 @@
 module main
 
-import os { args, read_file, is_file }
+import os { args, is_file, read_file }
 
 fn source_from_file(filename string) string {
 	if !is_file(filename) {
-		Exception{error:'$filename is not a file'}.create(true)
+		Exception{
+			error: '$filename is not a file'
+		}.create(true)
 	}
-	file_content := read_file(filename) or {panic(err)}
+	file_content := read_file(filename) or { panic(err) }
 
 	return file_content
 }
@@ -16,8 +18,8 @@ fn perform_arguments(results ArgumentParserResults) {
 	} else {
 		source := remove_source_comments(source_from_file(results.command))
 		mut process := BfProcess{
-			memory : [0],
-			data : source
+			memory: [0]
+			data: source
 		}
 		process.execute()
 	}

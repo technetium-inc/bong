@@ -24,16 +24,17 @@ fn create_character_string(character byte) string {
 }
 
 struct Token {
-	character string
+	character  string
 	token_type string
 }
 
 struct BfProcess {
-	mut:
-	memory []int = [0]
-	ptr int
-	data string [required]
+mut:
+	memory               []int = [0]
+	ptr                  int
+	data                 string   [required]
 	last_input_character string
+	stdout               []string
 }
 
 fn (mut process BfProcess) parse() []Token {
@@ -41,10 +42,20 @@ fn (mut process BfProcess) parse() []Token {
 
 	for character in process.data {
 		if [`+`, `-`, `*`, `>`, `<`].contains(character) {
-			tokens << Token{character:create_character_string(character), token_type:'op'}
+			tokens << Token{
+				character: create_character_string(character)
+				token_type: 'op'
+			}
 		} else if create_character_string(character) in digits {
-			tokens << Token{character:create_character_string(character)}
-		} 
+			tokens << Token{
+				character: create_character_string(character)
+			}
+		} else if [`.`, `#`, `,`].contains(character) {
+			tokens << Token{
+				character: create_character_string(character)
+				token_type: 'io'
+			}
+		}
 	}
 	return tokens
 }
@@ -58,13 +69,14 @@ fn (mut process BfProcess) execute() {
 		if current_token.token_type == 'op' {
 			if token_index == 0 {
 			} else {
-				previous_value := tokens[token_index-1]
-				if previous_value.token_type == 'op'{
+				previous_value := tokens[token_index - 1]
+				if previous_value.token_type == 'op' {
 					// operation_value := 1
 				} else {
 					operation_value = previous_value.character.int()
 				}
 			}
+
 			// println(process.memory[process.ptr])
 			if current_token.character == '+' {
 				process.memory[process.ptr] += operation_value
@@ -74,19 +86,21 @@ fn (mut process BfProcess) execute() {
 				process.memory[process.ptr] *= operation_value
 			} else if current_token.character == '<' {
 				if process.ptr == 0 {
-					Exception{error:'Negative Index'}.create(true)
+					Exception{
+						error: 'Negative Index'
+					}.create(true)
 				} else {
 					process.ptr -= 1
 				}
 			} else if current_token.character == '>' {
-				if process.ptr == process.memory.len-1 {
+				if process.ptr == process.memory.len - 1 {
 					process.memory << 0
 				} else {
 					process.ptr += 1
 				}
 			}
 		}
-		if token_index == tokens.len-1 {
+		if token_index == tokens.len - 1 {
 			break
 		}
 
@@ -95,4 +109,3 @@ fn (mut process BfProcess) execute() {
 
 	println(process)
 }
-
