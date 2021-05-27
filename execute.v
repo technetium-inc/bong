@@ -66,6 +66,25 @@ fn (mut process BfProcess) execute() {
 				}
 			}
 			// println(process.memory[process.ptr])
+			if current_token.character == '+' {
+				process.memory[process.ptr] += operation_value
+			} else if current_token.character == '-' {
+				process.memory[process.ptr] -= operation_value
+			} else if current_token.character == '*' {
+				process.memory[process.ptr] *= operation_value
+			} else if current_token.character == '<' {
+				if process.ptr == 0 {
+					Exception{error:'Negative Index'}.create(true)
+				} else {
+					process.ptr -= 1
+				}
+			} else if current_token.character == '>' {
+				if process.ptr == process.memory.len-1 {
+					process.memory << 0
+				} else {
+					process.ptr += 1
+				}
+			}
 		}
 		if token_index == tokens.len-1 {
 			break
@@ -73,5 +92,7 @@ fn (mut process BfProcess) execute() {
 
 		token_index += 1
 	}
+
+	println(process)
 }
 
