@@ -1,5 +1,7 @@
 module main
 
+import os { input }
+
 fn create_digit_array(range int) []string {
 	mut range_array := []string{}
 	for index := 0; index < range; index++ {
@@ -99,6 +101,19 @@ fn (mut process BfProcess) execute() {
 					process.ptr += 1
 				}
 			}
+		} else if current_token.token_type == 'io' {
+			if current_token.character == "." {
+				data := byte(process.memory[process.ptr]).ascii_str()
+				print(data)
+				process.stdout << data
+			} else if current_token.character == "," {
+				process.last_input_character = input('[?]')
+			} else if current_token.character == "#" {
+				if process.last_input_character.len > 1 {
+					print(process.last_input_character)
+				}
+			}
+
 		}
 		if token_index == tokens.len - 1 {
 			break
