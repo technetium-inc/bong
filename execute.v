@@ -102,18 +102,17 @@ fn (mut process BfProcess) execute() {
 				}
 			}
 		} else if current_token.token_type == 'io' {
-			if current_token.character == "." {
+			if current_token.character == '.' {
 				data := byte(process.memory[process.ptr]).ascii_str()
 				print(data)
 				process.stdout << data
-			} else if current_token.character == "," {
+			} else if current_token.character == ',' {
 				process.last_input_character = input('[?]')
-			} else if current_token.character == "#" {
+			} else if current_token.character == '#' {
 				if process.last_input_character.len > 1 {
 					print(process.last_input_character)
 				}
 			}
-
 		}
 		if token_index == tokens.len - 1 {
 			break
